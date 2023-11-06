@@ -2,7 +2,7 @@
 
 ## Versión 1
 
-Fuente: https://edube.org/learn/python-essentials-1-esp-edube/proyecto-tic-tac-toe-2
+Fuente: https://edube.org/learn/pe-1/project-tic-tac-toe-4
 
 ### Enunciado
 
