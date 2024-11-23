@@ -2,6 +2,8 @@ from __future__ import annotations  # Let's postpone the type evaluation because
 from typing import Callable, List, Dict, Optional
 from random import choice
 
+from numpy.random import randint
+
 # ------------------------------- Configuración -------------------------------
 
 # X, Y. Seriously, it's 3x3. It's not like we’re trying to build the next Google here.
@@ -84,12 +86,30 @@ def player_move(board: Dict[int, Optional[str]]) -> int:
         except (ValueError, KeyError):  # This catches anything that isn’t a number. Human error at its finest.
             print(INVALID_MOVE_TEXT)
 
-# Machine move function. Picking a random cell from the available ones because, why not.
-machine_move: Callable[[Dict[int, Optional[str]]], int] = lambda board: choice(
-    [cell for cell, value in board.items() if value is None]
-    # The machine is not playing chess. It’s just picking an available spot randomly. No strategy, just brute force.
+evaluate_board: Callable[[Dict[int, Optional[str]], str], Optional[int]] = lambda board, sign: (
+    1 if victory_for(board, MACHINE) else
+    -1 if victory_for(board, HUMAN) else
+    0 if is_board_full(board) else None
 )
 
+minimax: Callable[[Dict[int, Optional[str]], int, bool], int] = lambda board, depth, is_maximizing: (
+    evaluation if (evaluation := evaluate_board(board, MACHINE)) is not None else
+    max((
+        minimax(update_board(board, cell, MACHINE), depth + 1, False)
+        for cell in board if board[cell] is None
+    ), default=-float('inf')) if is_maximizing else
+    min((
+        minimax(update_board(board, cell, HUMAN), depth + 1, True)
+        for cell in board if board[cell] is None
+    ), default=float('inf'))
+)
+
+
+# Minimax implementation
+machine_move: Callable[[Dict[int, Optional[str]]], int] = lambda board: max(
+    (cell for cell in board if board[cell] is None),  # Iteramos sobre las celdas vacías
+    key=lambda cell: minimax(update_board(board, cell, MACHINE), 0, False)  # Maximizamos el valor del movimiento
+)
 # -------------------------------- Main --------------------------------------
 
 # Main function. The heart of the game. Where everything comes together in this beautiful disaster.
