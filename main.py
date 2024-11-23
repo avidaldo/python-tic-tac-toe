@@ -5,7 +5,8 @@ from random import choice
 # ------------------------------- Configuración -------------------------------
 
 # X, Y. Seriously, it's 3x3. It's not like we’re trying to build the next Google here.
-X, Y = 3, 3  # Dimensions of the board. A "tiny" tic-tac-toe grid. Nothing fancy.
+X, Y = 3,3   # Dimensions of the board. A "tiny" tic-tac-toe grid. Nothing fancy.
+# Na just adjust to your preferences
 
 # We define the players as characters, because humans can't play without understanding ASCII art.
 MACHINE, HUMAN = "X", "O"  # Machine plays as X, Human as O. We're keeping it old school, no need for anything complicated here.
