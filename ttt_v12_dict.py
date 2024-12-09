@@ -28,16 +28,14 @@ def is_board_completed(board):
     return len(list_of_free_fields(board)) == 0
 
 
+WINNING_COMBINATIONS = [
+    (1, 2, 3), (4, 5, 6), (7, 8, 9),  # Rows
+    (1, 4, 7), (2, 5, 8), (3, 6, 9),  # Columns
+    (1, 5, 9), (3, 5, 7)              # Diagonals
+]
+
 def victory_for(board, sign):
-    if (board[1] == board[2] == board[3] == sign or
-            board[4] == board[5] == board[6] == sign or
-            board[7] == board[8] == board[9] == sign or
-            board[1] == board[4] == board[7] == sign or
-            board[2] == board[5] == board[8] == sign or
-            board[3] == board[6] == board[9] == sign or
-            board[1] == board[5] == board[9] == sign or
-            board[3] == board[5] == board[7] == sign):
-        return sign
+    return any(all(board[cell] == sign for cell in combination) for combination in WINNING_COMBINATIONS)
 
 
 def machine_move(board):
