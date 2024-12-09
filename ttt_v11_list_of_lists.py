@@ -9,12 +9,12 @@ def display_board(board):
     def cell_display(row, col):
         return board[row][col] if (board[row][col] == "X" or board[row][col] == "O") else 3 * row + col + 1
 
-    print("+------+------+------+")
+    print("+-------+-------+-------+")
     for row in range(3):
-        print("|      |      |      |")
-        print("|  ", cell_display(row, 0), " |  ", cell_display(row, 1), " |  ", cell_display(row, 2), " |")
-        print("|      |      |      |")
-        print("+------+------+------+")
+        print("|       |       |       |")
+        print("|  ", cell_display(row, 0), "  |  ", cell_display(row, 1), "  |  ", cell_display(row, 2), "  |")
+        print("|       |       |       |")
+        print("+-------+-------+-------+")
 
 
 def cell_to_row_col(cell):
