@@ -1,18 +1,21 @@
 """
-Resolución siguiendo estrictamente el enunciado de https://edube.org/learn/pe-1/project-tic-tac-toe-4
+Solution strictly following the assignment from https://edube.org/learn/pe-1/project-tic-tac-toe-4
 """
 
 from random import randrange
 
 
 def display_board(board):
+
     def cell_display(row, col):
-        return board[row][col] if (board[row][col] == "X" or board[row][col] == "O") else 3 * row + col + 1
+        return board[row][col] if (board[row][col] == "X" or board[row][col]
+                                   == "O") else 3 * row + col + 1
 
     print("+-------+-------+-------+")
     for row in range(3):
         print("|       |       |       |")
-        print("|  ", cell_display(row, 0), "  |  ", cell_display(row, 1), "  |  ", cell_display(row, 2), "  |")
+        print("|  ", cell_display(row, 0), "  |  ", cell_display(row, 1),
+              "  |  ", cell_display(row, 2), "  |")
         print("|       |       |       |")
         print("+-------+-------+-------+")
 
@@ -28,7 +31,7 @@ def enter_move(board):
             print("You must enter a number (1-9).")
             continue
         row, col = cell_to_row_col(int(cell))
-        if board[row][col] is not None:
+        if board[row][col] != " ":
             print("Invalid move, try again.")
         else:
             break
@@ -37,21 +40,22 @@ def enter_move(board):
 
 
 def make_list_of_free_fields(board):
-    return [(row, col) for row in range(3) for col in range(3) if board[row][col] == " "]
+    return [(row, col) for row in range(3) for col in range(3)
+            if board[row][col] == " "]
 
 
 def victory_for(board, sign):
-    if (# Filas
-            board[0][0] == board[0][1] == board[0][2] == sign or
-            board[1][0] == board[1][1] == board[1][2] == sign or
-            board[2][0] == board[2][1] == board[2][2] == sign or
-        #Columnas
-            board[0][0] == board[1][0] == board[2][0] == sign or
-            board[0][1] == board[1][1] == board[2][1] == sign or
-            board[0][2] == board[1][2] == board[2][2] == sign or
-        # Diagonales
-            board[0][0] == board[1][1] == board[2][2] == sign or
-            board[0][2] == board[1][1] == board[2][0] == sign):
+    if (  # Rows
+            board[0][0] == board[0][1] == board[0][2] == sign
+            or board[1][0] == board[1][1] == board[1][2] == sign
+            or board[2][0] == board[2][1] == board[2][2] == sign or
+            # Columns
+            board[0][0] == board[1][0] == board[2][0] == sign
+            or board[0][1] == board[1][1] == board[2][1] == sign
+            or board[0][2] == board[1][2] == board[2][2] == sign or
+            # Diagonals
+            board[0][0] == board[1][1] == board[2][2] == sign
+            or board[0][2] == board[1][1] == board[2][0] == sign):
         return True
 
 
@@ -72,7 +76,9 @@ def main():
         if victory_for(board, "X"):
             print("I won!")
             break
-        if len(make_list_of_free_fields(board)) == 0:  # Draw only posible after X's move (X always moves first)
+        if len(
+                make_list_of_free_fields(board)
+        ) == 0:  # Draw only posible after X's move (X always moves first)
             print("Draw!")
             break
         enter_move(board)

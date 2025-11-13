@@ -1,11 +1,12 @@
 """
-Versión que implementa el algoritmo Minimax para la lógica de la máquina. No puede perder. Además, permite elegir quién empieza la partida.
+Version that implements the Minimax algorithm for the machine logic. It cannot lose.
+Additionally, it allows you to choose who starts the game.
 """
 
 from random import choice
 import math
 
-# ------------------------------ Lógica ------------------------------
+# ------------------------------ Logic ------------------------------
 
 AI = "X"
 HUMAN = "O"
@@ -38,7 +39,7 @@ def minimax(board, is_maximizing):
         return best_score
 
 
-# Agente Minimax: retorna el mejor movimiento para la IA
+# Minimax Agent: returns the best move for the AI
 def minimax_move(board):
     best_move = None
     best_value = -math.inf

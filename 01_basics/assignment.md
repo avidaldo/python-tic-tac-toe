@@ -1,21 +1,21 @@
-# Enunciado original
+# Original Assignment
 
-Fuente: https://edube.org/learn/pe-1/project-tic-tac-toe-4
+Source: https://edube.org/learn/pe-1/project-tic-tac-toe-4
 
-La máquina jugará utilizando las 'X's. El usuario jugará utilizando las 'O's.
-El primer movimiento es de la máquina: siempre coloca una 'X' en el centro del tablero.
+The machine will play using 'X's. The user will play using 'O's.
+The first move belongs to the machine: it always places an 'X' in the center of the board.
 
-Todos los cuadros están numerados comenzando con el 1 (observa el ejemplo para que tengas una referencia).
+All squares are numbered starting with 1 (see the example for reference).
 
-El usuario ingresa su movimiento introduciendo el número de cuadro elegido. El número debe de ser válido, por ejemplo un valor entero mayor que 0 y menor que 10, y no puede ser un cuadro que ya esté ocupado.
+The user enters their move by entering the chosen square number. The number must be valid, for example an integer value greater than 0 and less than 10, and it cannot be a square that is already occupied.
 
-El programa verifica si el juego ha terminado. Existen cuatro posibles veredictos: el juego continúa, el juego termina en empate, el jugador gana, o la máquina gana.
+The program checks if the game has ended. There are four possible verdicts: the game continues, the game ends in a draw, the player wins, or the machine wins.
 
-La máquina responde con su movimiento y se verifica el estado del juego.
+The machine responds with its move and the game state is checked.
 
-No se debe implementar ningún tipo de inteligencia artificial, la máquina elegirá un cuadro de manera aleatoria, eso es suficiente para esta versión.
+No artificial intelligence should be implemented, the machine will choose a square randomly, that is sufficient for this version.
 
-El ejemplo del programa es el siguiente:
+The program example is as follows:
 
 ```none
 +-------+-------+-------+
@@ -32,7 +32,7 @@ El ejemplo del programa es el siguiente:
 |       |       |       |
 +-------+-------+-------+
 
-Ingresa tu movimiento: 1
+Enter your move: 1
 +-------+-------+-------+
 |       |       |       |
 |   O   |   2   |   3   |
@@ -60,7 +60,7 @@ Ingresa tu movimiento: 1
 |       |       |       |
 +-------+-------+-------+
 
-Ingresa tu movimiento: 8
+Enter your move: 8
 +-------+-------+-------+
 |       |       |       |
 |   O   |   X   |   3   |
@@ -88,7 +88,7 @@ Ingresa tu movimiento: 8
 |       |       |       |
 +-------+-------+-------+
 
-Ingresa tu movimiento: 4
+Enter your move: 4
 +-------+-------+-------+
 |       |       |       |
 |   O   |   X   |   3   |
@@ -116,7 +116,7 @@ Ingresa tu movimiento: 4
 |       |       |       |
 +-------+-------+-------+
 
-Ingresa tu movimiento: 7
+Enter your move: 7
 +-------+-------+-------+
 |       |       |       |
 |   O   |   X   |   X   |
@@ -130,6 +130,6 @@ Ingresa tu movimiento: 7
 |   O   |   O   |   9   |
 |       |       |       |
 +-------+-------+-------+
-¡Has Ganado!
+You Won!
 
 ```

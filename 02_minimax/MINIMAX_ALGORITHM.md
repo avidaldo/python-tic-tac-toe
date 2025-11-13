@@ -57,7 +57,7 @@ Minimax became one of the first algorithms implemented in early AI programs:
 While modern game-playing AI (like AlphaGo and chess engines) uses more sophisticated techniques, minimax remains:
 
 - A pedagogical cornerstone for teaching AI and algorithms
-- The foundation for advanced techniques like alpha-beta pruning, Monte Carlo Tree Search
+- The foundation for advanced techniques like **alpha-beta pruning**, **Monte Carlo Tree Search**
 - Relevant in domains beyond games: cybersecurity, economics, and automated negotiation
 
 ---
@@ -76,7 +76,7 @@ Minimax visualizes the game as a tree:
 
 The algorithm alternates between two perspectives:
 
-1. **Maximizing Player** (usually the AI): Tries to maximize the score
+1. **Maximizing Player** (usually the AI agent): Tries to maximize the score
 2. **Minimizing Player** (usually the opponent): Tries to minimize the score
 
 ### The Recursive Process

@@ -1,2 +1,5 @@
 # all python cache files
 __pycache__/
+.vscode/
+.claude/
+04_qlearning/training/q_table.pkl

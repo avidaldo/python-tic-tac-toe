@@ -1,6 +1,6 @@
 """
-Versión que implementa el algoritmo Minimax para la lógica de la máquina. No puede perder.
-Además, permite elegir quién empieza la partida.
+Version that implements the Minimax algorithm for the machine logic. It cannot lose.
+Additionally, it allows you to choose who starts the game.
 """
 
 from random import choice

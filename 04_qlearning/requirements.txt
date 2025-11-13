@@ -1,0 +1,13 @@
+numpy
+matplotlib
+matplotlib-inline
+jupyter
+ipykernel
+ipython
+notebook
+
+
+Pillow
+pyparsing
+cycler
+kiwisolver

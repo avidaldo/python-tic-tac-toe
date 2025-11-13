@@ -1,5 +1,8 @@
 """
-Defino el tablero de juego como un diccionario donde cada clave identifica el número que se mostrará para identificar la casilla. Los valores de cada clave son None cuando no hay ficha y las contantes MACHINE y HUMAN cuando hay una ficha de la máquina o del humano respectivamente.
+The game board is defined as a dictionary where each key identifies the number
+that will be shown to identify the cell. The values of each key are None when
+there is no piece and the constants MACHINE and HUMAN when there is a machine
+or human piece respectively.
 """
 
 from random import choice
@@ -7,7 +10,7 @@ from random import choice
 MACHINE = "X"
 HUMAN = "O"
 
-# ------------------------------ Lógica ------------------------------
+# ------------------------------ Logic ------------------------------
 
 def is_taken_cell(board, cell):
     return board[cell] is not None
