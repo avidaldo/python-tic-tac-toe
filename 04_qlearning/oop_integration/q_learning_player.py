@@ -7,7 +7,7 @@ the trained Q-learning agent into the object-oriented tic-tac-toe game.
 
 from pathlib import Path
 
-from ..training.q_learning_agent import QLearningAgent
+from ..core.agents.q_learning_agent import QLearningAgent
 
 
 class QLearningMachinePlayer:
@@ -31,9 +31,10 @@ class QLearningMachinePlayer:
 
         # Create Q-learning agent in play mode (no training, no exploration)
         self.agent = QLearningAgent(
-            symbol=symbol,
+            symbol=str(symbol),  # board cells are compared as plain strings
             training_mode=False,
-            epsilon=0.0
+            epsilon=0.0,
+            canonical_state=True  # the Q-table is trained with canonical states
         )
 
         # Load Q-table if provided
@@ -41,7 +42,7 @@ class QLearningMachinePlayer:
             self.load_q_table(q_table_path)
         else:
             # Try to load default Q-table
-            default_path = Path(__file__).parent.parent / 'training' / 'q_table.pkl'
+            default_path = Path(__file__).parent.parent / 'standalone' / 'q_table.pkl'
             if default_path.exists():
                 self.load_q_table(str(default_path))
             else:

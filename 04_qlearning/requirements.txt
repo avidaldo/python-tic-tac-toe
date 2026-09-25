@@ -1,5 +1,7 @@
 numpy
 matplotlib
+pandas
+seaborn
 matplotlib-inline
 jupyter
 ipykernel

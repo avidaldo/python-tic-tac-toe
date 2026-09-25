@@ -1,6 +1,7 @@
 # 04 - Q-Learning (Reinforcement Learning)
 
-This folder contains a complete implementation of **Q-Learning** applied to Tic-Tac-Toe, demonstrating how an agent can learn to play through trial and error.
+This folder applies **Q-Learning** to Tic-Tac-Toe. It starts with the most direct implementation and
+improves it one step at a time, until the agent never loses against a perfect player.
 
 ## 📚 Project Structure
 
@@ -9,196 +10,110 @@ This folder contains a complete implementation of **Q-Learning** applied to Tic-
 ├── README.md                    # This file
 ├── requirements.txt             # Python dependencies
 │
-├── theory/                      # 📖 Theory and educational notebooks
-│   └── tictactoe_qlearning.ipynb
+├── notebooks/                   # 📖 The learning path, in order
+│   ├── 01_qlearning_basics.ipynb
+│   ├── 02_turn_based_updates.ipynb
+│   ├── 03_minimax_training.ipynb
+│   ├── 04_selfplay_training.ipynb
+│   ├── 05_canonical_selfplay.ipynb
+│   └── 06_hyperparameter_search.ipynb
 │
-├── training/                    # 🎓 Agent training
-│   ├── environment.py           # Game environment (shared module)
-│   ├── q_learning_agent.py      # Agent implementation (shared module)
-│   ├── train_qlearning.py       # Training script
-│   ├── demo.py                  # Quick demo
-│   └── q_table.pkl              # Trained Q-table (365KB)
+├── core/                        # 🧩 Shared code (single source of truth)
+│   ├── environment.py           # TicTacToeEnvironment: board, rules, win detection
+│   ├── agents/
+│   │   ├── agent.py             # Agent base class
+│   │   ├── q_learning_agent.py  # QLearningAgent (absolute or canonical states)
+│   │   ├── minimax_agent.py     # MinimaxAgent: perfect player
+│   │   └── random_agent.py      # RandomAgent: baseline
+│   └── training.py              # play_game (turn-based updates), evaluate_agent, plot_training_history
 │
-├── standalone/                  # 🎮 Standalone game
-│   └── ttt_qlearning.py         # CLI to play vs agent
+├── standalone/                  # 🎮 Command line
+│   ├── train_qlearning.py       # Train and save q_table.pkl
+│   └── ttt_qlearning.py         # Play against the trained agent
 │
-└── oop_integration/             # 🔗 Integration with OOP version
-    ├── README.md                # Integration guide
+└── oop_integration/             # 🔗 Integration with the 03_oop version
+    ├── README.md
     ├── q_learning_player.py     # QLearningMachinePlayer
-    └── main.py                  # OOP game + Q-Learning
+    └── main.py
 ```
 
-## 🚀 Quick Guide
+## 📖 Learning Path
 
-**Important:** All scripts must be run as Python modules from the project root directory (`python-tic-tac-toe/`).
+| Notebook | Step | What you learn |
+|----------|------|----------------|
+| `01_qlearning_basics` | **Basics** | RL loop, Q-table, Bellman equation, ε-greedy. A first agent trained against a random opponent, with the most direct training loop. |
+| `02_turn_based_updates` | **Getting the update right** | Instrumenting the agent shows two flaws in that loop: losses never reach the Q-table, and $s'$ is a state where the *opponent* is to move. Fix: in a two-player game, a transition ends at the agent's **next turn**. |
+| `03_minimax_training` | **A perfect opponent** | Training against Minimax teaches the agent to draw, but only in the few positions Minimax reaches. Opponent coverage matters. |
+| `04_selfplay_training` | **Self-play** | Two learners train each other: both a strong and a varied opponent. |
+| `05_canonical_selfplay` | **Sharing experience** | Canonical states ("me / opponent / empty") let both sides share one Q-table and learn faster. |
+| `06_hyperparameter_search` | **Tuning** | Grid search over α, γ and ε_decay, averaged over several seeds and evaluated against Minimax and Random. |
 
-### Why Run as Modules?
+Every notebook uses the same hyperparameters unless it says otherwise: α=0.1, γ=0.9, ε starting at 1.0
+and multiplied by 0.9995 after every game, down to 0.05.
 
-This project uses **relative imports** to share code between components without duplication. When you run a script as a module with `python3 -m`, Python treats the entire project as a package, allowing imports like `from ..training.q_learning_agent import QLearningAgent` to work correctly. This approach eliminates the need for manual `sys.path` manipulation and ensures consistent file paths regardless of where you run the command from.
+Run the notebooks from the `notebooks/` folder: each one adds the parent folder to `sys.path` and imports
+from `core`.
 
-**Module execution** means running Python code using `-m` followed by the module path (with dots instead of slashes): `python3 -m 04_qlearning.standalone.ttt_qlearning` instead of `python3 04_qlearning/standalone/ttt_qlearning.py`. This tells Python to treat `04_qlearning` as a package and resolve all relative imports correctly.
+### Strategy Comparison
 
-### Option 1: Use the Pre-trained Agent
+Greedy evaluation (no exploration) of the agents trained in the notebooks:
+
+| Training | Notebook | Loss vs Random | Loss vs Minimax |
+|----------|----------|----------------|-----------------|
+| Random opponent, naive loop | 01 / 02 | 20.7% | ~87% |
+| Random opponent, turn-based loop | 02 | 2.3% | 10.8% |
+| Minimax | 03 | 34.0% | 0.0% |
+| Self-play, two tables (30,000 games) | 04 | 0.0-0.1% | 0.0% |
+| Canonical self-play, one table (20,000 games) | 05 | 0.0-0.2% | 0.0% |
+
+The notebooks' results use fixed seeds; the figures in notebook 02 are averaged over 3 seeds.
+
+## 🚀 Command Line
+
+All scripts run as Python modules **from the project root** (`python-tic-tac-toe/`):
 
 ```bash
-# From the project root (python-tic-tac-toe/)
-python3 -m 04_qlearning.standalone.ttt_qlearning
-```
-
-### Option 2: Train Your Own Agent
-
-```bash
-# 1. Install dependencies
 pip install -r 04_qlearning/requirements.txt
 
-# 2. Train (5-10 minutes, 50,000 episodes)
-python3 -m 04_qlearning.training.train_qlearning
+# Train with canonical self-play (a few seconds) and save standalone/q_table.pkl
+python3 -m 04_qlearning.standalone.train_qlearning
 
-# 3. View demo
-python3 -m 04_qlearning.training.demo
-
-# 4. Play
+# Play against the trained agent
 python3 -m 04_qlearning.standalone.ttt_qlearning
-```
 
-### Option 3: Integrate with OOP Version
-
-```bash
-# From the project root
+# Play inside the OOP version of the game
 python3 -m 04_qlearning.oop_integration.main
 ```
 
-## 📖 Step-by-Step Learning
+### Why run as modules?
 
-### Step 1: Understand the Theory
+The scripts import the shared code with **relative imports** (`from ..core.environment import ...`).
+Running `python3 -m 04_qlearning.standalone.ttt_qlearning` makes Python treat `04_qlearning` as a package,
+so those imports resolve without any `sys.path` manipulation.
 
-Open the educational notebook:
-```bash
-jupyter notebook theory/tictactoe_qlearning.ipynb
-```
-
-**Notebook contents:**
-1. What is Reinforcement Learning?
-2. Q-Learning algorithm explained
-3. Bellman equation step by step
-4. Implementation from scratch
-5. Interactive training
-6. Q-values visualization
-7. Play against the agent
-
-### Step 2: Train your Agent
-
-```bash
-# From the project root
-python3 -m 04_qlearning.training.train_qlearning
-```
-
-**What happens during training?**
-
-1. **Episode 1-10,000**: High exploration (ε=1.0 → 0.01)
-   - Agent tries random moves
-   - Learns what works and what doesn't
-   - Win rate: ~50-70%
-
-2. **Episode 10,000-30,000**: Refinement
-   - Less exploration, more exploitation
-   - Q-values stabilize
-   - Win rate: ~70-80%
-
-3. **Episode 30,000-50,000**: Convergence
-   - Nearly optimal strategy
-   - Win rate: ~80-85%
-
-**Expected result:**
-- Win rate: 83-85% (vs random opponent)
-- Loss rate: 5-7%
-- Draw rate: 10-12%
-- Q-table: ~12,500 entries, ~4,500 unique states
-
-### Step 3: Analyze the Trained Agent
-
-```bash
-# From the project root
-python3 -m 04_qlearning.training.demo
-```
-
-Shows:
-- Q-table statistics
-- 10 demonstration games
-- Agent performance
-
-### Step 4: Play Against the Agent
-
-**Option A - Standalone:**
-```bash
-# From the project root
-python3 -m 04_qlearning.standalone.ttt_qlearning
-```
-
-**Option B - Integrated in OOP:**
-```bash
-# From the project root
-python3 -m 04_qlearning.oop_integration.main
-```
-
-
-## 🔬 Advanced Experiments
-
-### 1. Self-Play
-
-```python
-# Train against another agent instead of random
-agent2 = QLearningAgent(symbol='O', training_mode=True)
-play_training_game(agent1, opponent_agent=agent2)
-```
-
-### 2. Train vs Minimax
-Stronger agent → learns optimal strategy faster.
-
-### 3. Board Symmetries
-Reduce Q-table by recognizing equivalent states:
-```
-X| |O     O| |X     Same
------  =  -----  =  strategy
- | |       | |      (rotation)
- | |       | |
-```
-
-### 4. Transfer Learning
-Use Tic-Tac-Toe Q-table for similar games.
-
+The Q-table files (`*.pkl`) are ignored by Git: they can always be regenerated by training.
 
 ## 🏗️ Code Architecture
 
-The codebase uses a **modular architecture** to eliminate duplication:
-
 ```
-Core Modules (training/):
-  ├─ environment.py        ← Single source of truth for game logic
-  ├─ q_learning_agent.py   ← Shared Q-Learning implementation
-  └─ train_qlearning.py    ← Training pipeline
+core/                      ← single source of truth
+  ├─ environment.py
+  ├─ agents/
+  └─ training.py
 
 Consumers:
-  ├─ standalone/ttt_qlearning.py        ← Extends environment for CLI
-  ├─ theory/tictactoe_qlearning.ipynb   ← Imports modules for teaching
-  └─ oop_integration/                   ← Adapts for OOP architecture
+  ├─ notebooks/            ← import core after adding the parent folder to sys.path
+  ├─ standalone/           ← relative imports (python3 -m ...)
+  └─ oop_integration/      ← adapts QLearningAgent to the 03_oop player interface
 ```
 
-**Benefits:**
-- ✅ No code duplication between notebook and scripts
-- ✅ Single source of truth for each class
-- ✅ Easier maintenance and bug fixes
-- ✅ Notebook focuses on explanation, not implementation
+`QLearningAgent` only knows *how* to update a Q-value. *When* to update it is decided by the game loop.
+Notebook 01 writes a naive loop inline, notebook 02 writes the corrected one, and from then on every
+notebook and script uses `core.training.play_game`.
 
-## 💡 Conclusion
+## 🔬 Further Experiments
 
-You've built an RL agent from scratch that:
-- Learns without being told the rules
-- Improves with experience
-- Plays almost optimally
-
-**This is the foundation of:**
-- AlphaGo (defeated Go champion)
-- Video game agents (Dota 2, Starcraft)
-- Robotics (motion control)
-- Recommendation systems
+- **Board symmetries**: map each board to one representative of its 8 rotations/reflections (exercise in notebook 05).
+- **Curriculum**: train against a random opponent first, then switch to self-play.
+- **Faster convergence**: repeat the grid search with 5,000 episodes per run (exercise in notebook 06).
+- **Deep Q-Networks**: replace the table with a neural network, which is needed for games with far more states.

@@ -25,6 +25,11 @@ class QLearningMachinePlayer:
         board[move] = self.symbol
 ```
 
+The Q-table comes from `python3 -m 04_qlearning.standalone.train_qlearning`, which trains with **canonical
+states** (see notebook 05). The adapter therefore creates the agent with `canonical_state=True` and passes it
+the symbol as a plain string (`str(Symbol.AI)` → `'X'`), because canonical states compare board cells with
+the agent's own symbol.
+
 ### [main.py](main.py)
 **OOP Game with Q-Learning Option**
 
@@ -80,7 +85,7 @@ class QLearningMachinePlayer:
 
 ```python
 # Automatically searches for the trained Q-table
-default_path = '../training/q_table.pkl'
+default_path = '../standalone/q_table.pkl'
 
 # Or specify custom path
 player = QLearningMachinePlayer(
@@ -125,7 +130,7 @@ Select AI opponent:
 
 Your choice (1/2/3): 3
 
-Q-table loaded from ../training/q_table.pkl
+Q-table loaded from ../standalone/q_table.pkl
 Total state-action pairs: 12517
 Q-learning agent loaded successfully
 
@@ -269,7 +274,7 @@ python3 -m 04_qlearning.oop_integration.main
 | Opponent | Win Rate (Human) | Difficulty |
 |----------|-------------------|------------|
 | Random | ~80% | ⭐ Easy |
-| Q-Learning | ~15% | ⭐⭐⭐ Hard |
+| Q-Learning (canonical self-play) | ~0% (never lost to Minimax in evaluation) | ⭐⭐⭐⭐ Very hard |
 | Minimax | 0% | ⭐⭐⭐⭐ Impossible |
 
 ## 🧪 Testing

@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from ..training.environment import TicTacToeEnvironment
-from ..training.q_learning_agent import QLearningAgent
+from ..core.environment import TicTacToeEnvironment
+from ..core.agents.q_learning_agent import QLearningAgent
 
 
 class TicTacToe(TicTacToeEnvironment):
@@ -142,10 +142,10 @@ def main():
     print("=" * 50)
 
     # Initialize agent
-    agent = QLearningAgent(symbol='X', training_mode=False)
+    # The Q-table is trained with canonical states (see train_qlearning.py)
+    agent = QLearningAgent(symbol='X', training_mode=False, canonical_state=True)
 
-    # Load pre-trained Q-table from training directory
-    q_table_file = Path(__file__).parent.parent / 'training' / 'q_table.pkl'
+    q_table_file = Path(__file__).parent / 'q_table.pkl'
 
     if q_table_file.exists():
         agent.load(str(q_table_file))
@@ -157,7 +157,7 @@ def main():
     else:
         print(f"\nWarning: No trained Q-table found at '{q_table_file}'")
         print("The agent will play randomly. Please train the agent first.")
-        print("Run: python3 -m 04_qlearning.training.train_qlearning")
+        print("Run: python3 -m 04_qlearning.standalone.train_qlearning")
         response = input("\nContinue anyway? (y/n): ")
         if response.lower() != 'y':
             return

@@ -18,16 +18,16 @@ class TicTacToeEnvironment:
         (1, 5, 9), (3, 5, 7)              # Diagonals
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the environment with an empty board."""
         self.reset()
 
-    def reset(self):
+    def reset(self) -> dict[int, str | None]:
         """Reset the board for a new game."""
-        self.board = {i: None for i in range(1, 10)}
+        self.board: dict[int, str | None] = {i: None for i in range(1, 10)}
         return self.board
 
-    def get_available_actions(self):
+    def get_available_actions(self) -> list[int]:
         """
         Get list of available moves (empty cells).
 
@@ -36,7 +36,7 @@ class TicTacToeEnvironment:
         """
         return [cell for cell, value in self.board.items() if value is None]
 
-    def make_move(self, cell, symbol):
+    def make_move(self, cell: int, symbol: str) -> bool:
         """
         Place symbol in cell.
 
@@ -52,7 +52,7 @@ class TicTacToeEnvironment:
             return True
         return False
 
-    def check_winner(self):
+    def check_winner(self) -> str | None:
         """
         Check if there's a winner.
 
@@ -65,7 +65,7 @@ class TicTacToeEnvironment:
                 return cells[0]
         return None
 
-    def is_full(self):
+    def is_full(self) -> bool:
         """
         Check if board is full (draw condition).
 
@@ -74,7 +74,7 @@ class TicTacToeEnvironment:
         """
         return all(value is not None for value in self.board.values())
 
-    def is_game_over(self):
+    def is_game_over(self) -> tuple[bool, str | None]:
         """
         Check if game ended.
 
@@ -89,7 +89,7 @@ class TicTacToeEnvironment:
         else:
             return False, None
 
-    def display(self):
+    def display(self) -> None:
         """Display the board in a nice format."""
         print("\n")
         for row in range(3):

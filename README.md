@@ -37,9 +37,9 @@ python-tic-tac-toe/
 │   └── README.md
 │
 └── 04_qlearning/           # 🤖 Q-Learning (RL)
-    ├── theory/             # Educational notebooks
-    ├── training/           # Train agent
-    ├── standalone/         # Standalone game
+    ├── notebooks/          # Step-by-step notebooks (01 basics → 06 tuning)
+    ├── core/               # Shared environment, agents and training loop
+    ├── standalone/         # Train and play from the command line
     ├── oop_integration/    # Integration with 03_oop
     └── README.md
 ```
@@ -121,40 +121,33 @@ Build an agent that learns by itself using Reinforcement Learning:
 - Q-Learning algorithm
 - Bellman equation
 - Exploration vs Exploitation
-- Agent training
+- Training in a turn-based (two-player) game
+- Training opponents: random, Minimax, self-play
+- Hyperparameter search
 - Integration with existing code
 
 **Learning path:**
 
-1. **Theory** (2 hours)
+1. **Notebooks** `04_qlearning/notebooks/01` → `06`, in order (see [`04_qlearning/README.md`](04_qlearning/README.md))
+
+2. **Train your agent** (a few seconds), from the repository root
    ```bash
-   cd 04_qlearning/theory
-   jupyter notebook tictactoe_qlearning.ipynb
+   python3 -m 04_qlearning.standalone.train_qlearning
    ```
 
-2. **Train your agent** (10 minutes)
+3. **Play against the agent**
    ```bash
-   cd 04_qlearning/training
-   python3 train_qlearning.py
-   ```
-
-3. **Play against the agent** (∞ hours of fun)
-   ```bash
-   cd 04_qlearning/standalone
-   python3 ttt_qlearning.py
+   python3 -m 04_qlearning.standalone.ttt_qlearning
    ```
 
 4. **Integrate with OOP**
    ```bash
-   cd 04_qlearning/oop_integration
-   python3 main.py
-   # Select option 3: Q-Learning
+   python3 -m 04_qlearning.oop_integration.main
    ```
 
-**Expected results:**
-- Win rate: 83.5% vs random
-- Q-table: ~12,500 entries
-- Learns winning strategies automatically
+**Expected results** (canonical self-play, 20,000 games):
+- Never loses against Minimax (always draws)
+- Wins ~93% and loses ~0% against a random opponent
 
 ## 🎮 Quick Gameplay
 
@@ -167,8 +160,8 @@ python3 03_oop/main.py  # Option 1
 # Impossible - Perfect Minimax
 python3 03_oop/main.py  # Option 2
 
-# Hard - Trained agent (Q-Learning)
-python3 04_qlearning/standalone/ttt_qlearning.py
+# Very hard - Trained agent (Q-Learning), from the repository root
+python3 -m 04_qlearning.standalone.ttt_qlearning
 
 ```
 
@@ -177,7 +170,7 @@ python3 04_qlearning/standalone/ttt_qlearning.py
 | Aspect | Basic | Minimax | Q-Learning |
 |---------|--------|---------|------------|
 | **Complexity** | Low | Medium | High |
-| **Performance** | Poor (~50%) | Optimal (100%) | Very good (~85%) |
+| **Performance** | Poor (~50%) | Optimal | Near-optimal after training (never lost to Minimax in evaluation) |
 | **Learns** | No | No | Yes |
 | **Requires rules** | Yes | Yes | No |
 | **Code** | 50 lines | 100 lines | 300 lines |
@@ -199,6 +192,7 @@ Dependencies:
 - `numpy` - Numerical operations
 - `jupyter` - Interactive notebooks
 - `matplotlib` - Visualizations
+- `pandas`, `seaborn` - Hyperparameter search tables and heatmap
 
 ## 📈 Complexity Progression
 
@@ -237,8 +231,9 @@ Dependencies:
 - ✅ Q-Learning algorithm
 - ✅ Bellman equation
 - ✅ Exploration vs Exploitation
-- ✅ Agent training
+- ✅ Agent training (random opponent, Minimax, self-play)
 - ✅ Performance evaluation
+- ✅ Hyperparameter search
 
 
 ## 🔬 Suggested Experiments
@@ -260,9 +255,8 @@ Dependencies:
 - [ ] Add statistics
 
 ### Q-Learning
-- [ ] Train against Minimax
-- [ ] Implement self-play
-- [ ] Explore different hyperparameters
+- [ ] Use board symmetries to shrink the Q-table (exercise in notebook 05)
+- [ ] Curriculum: random opponent first, then self-play
 - [ ] Visualize Q-values in real-time
 - [ ] Implement DQN (Deep Q-Network)
 

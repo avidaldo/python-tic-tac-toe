@@ -8,9 +8,9 @@ tic-tac-toe using the Q-learning algorithm.
 import numpy as np
 import random
 import pickle
+from .agent import Agent
 
-
-class QLearningAgent:
+class QLearningAgent(Agent):
     """
     A Q-Learning agent that learns optimal tic-tac-toe strategy through
     trial and error.
@@ -20,8 +20,8 @@ class QLearningAgent:
     lead to wins, losses, or draws.
     """
 
-    def __init__(self, symbol='X', learning_rate=0.1, discount_factor=0.9,
-                 epsilon=0.1, training_mode=True):
+    def __init__(self, symbol: str = 'X', learning_rate: float = 0.1, discount_factor: float = 0.9,
+                 epsilon: float = 0.1, training_mode: bool = True, q_table: dict[tuple[int | str | None, ...], float] | None = None, canonical_state: bool = False) -> None:
         """
         Initialize the Q-Learning agent.
 
@@ -31,24 +31,36 @@ class QLearningAgent:
             discount_factor (γ): How much to value future rewards (0-1)
             epsilon (ε): Exploration rate for epsilon-greedy policy (0-1)
             training_mode: If True, agent explores; if False, uses greedy policy
+            q_table: Optional shared Q-table dictionary
+            canonical_state: If True, uses relative state representation
+                           (1 for self, -1 for opponent, 0 for empty)
         """
-        self.symbol = symbol
+        super().__init__(symbol)
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.epsilon = epsilon
         self.training_mode = training_mode
+        self.canonical_state = canonical_state
 
         # Q-table: dictionary mapping (state, action) -> Q-value
         # state: tuple of 9 values representing board configuration
         # action: integer 1-9 representing cell position
-        self.q_table = {}
+        if q_table is None:
+            self.q_table: dict[tuple[tuple[int | str | None, ...], int], float] = {}
+        else:
+            self.q_table = q_table  # type: ignore
 
         # Track the history of (state, action) pairs in current episode
-        self.episode_history = []
+        self.episode_history: list[tuple[tuple[int | str | None, ...], int]] = []
 
-    def get_state_key(self, board):
+    def get_state_key(self, board: dict[int, str | None]) -> tuple[int | str | None, ...]:
         """
         Convert board dictionary to a hashable tuple for Q-table lookup.
+
+        If canonical_state is True, converts to relative perspective:
+        - 1: My symbol
+        - -1: Opponent's symbol
+        - 0: Empty
 
         Args:
             board: Dictionary with keys 1-9, values None, 'X', or 'O'
@@ -56,9 +68,24 @@ class QLearningAgent:
         Returns:
             Tuple of 9 values representing the board state
         """
-        return tuple(board.get(i, None) for i in range(1, 10))
+        if self.canonical_state:
+            # Canonical representation: 1 for me, -1 for opponent, 0 for empty
+            state: list[int] = []
+            for i in range(1, 10):
+                cell = board.get(i)
+                if cell == self.symbol:
+                    val = 1
+                elif cell is None:
+                    val = 0
+                else:  # Opponent
+                    val = -1
+                state.append(val)
+            return tuple(state)
+        else:
+            # Standard absolute representation
+            return tuple(board.get(i, None) for i in range(1, 10))
 
-    def get_q_value(self, state, action):
+    def get_q_value(self, state: tuple[int | str | None, ...], action: int) -> float:
         """
         Get Q-value for a state-action pair.
 
@@ -71,7 +98,7 @@ class QLearningAgent:
         """
         return self.q_table.get((state, action), 0.0)
 
-    def set_q_value(self, state, action, value):
+    def set_q_value(self, state: tuple[int | str | None, ...], action: int, value: float) -> None:
         """
         Set Q-value for a state-action pair.
 
@@ -82,7 +109,7 @@ class QLearningAgent:
         """
         self.q_table[(state, action)] = value
 
-    def choose_action(self, board, available_actions):
+    def choose_action(self, board: dict[int, str | None], available_actions: list[int]) -> int:
         """
         Choose an action using epsilon-greedy policy.
 
@@ -124,7 +151,7 @@ class QLearningAgent:
 
         return action
 
-    def learn(self, reward, next_board=None):
+    def learn(self, reward: float, next_board: dict[int, str | None] | None = None) -> None:
         """
         Update Q-value using Q-learning formula (Bellman equation).
 
@@ -138,7 +165,7 @@ class QLearningAgent:
             reward: Immediate reward received
                    - Final rewards: +1.0 (win), -1.0 (loss), 0.0 (draw)
                    - Intermediate: -0.01 (small penalty per move)
-            next_board: Resulting board state after the action.
+            next_board: Board at this agent's next turn, i.e. after the opponent's reply.
                        - If None: Game ended (terminal state)
                        - If dict: Game continues (non-terminal state)
         """
@@ -174,11 +201,11 @@ class QLearningAgent:
 
         self.set_q_value(state, action, new_q)
 
-    def reset_episode(self):
+    def reset_episode(self) -> None:
         """Reset the episode history for a new game."""
         self.episode_history = []
 
-    def save(self, filename):
+    def save(self, filename: str) -> None:
         """
         Save the Q-table to a file.
 
@@ -190,7 +217,7 @@ class QLearningAgent:
         print(f"Q-table saved to {filename}")
         print(f"Total state-action pairs learned: {len(self.q_table)}")
 
-    def load(self, filename):
+    def load(self, filename: str) -> None:
         """
         Load Q-table from a file.
 
@@ -206,15 +233,15 @@ class QLearningAgent:
             print(f"No saved Q-table found at {filename}")
             print("Starting with empty Q-table")
 
-    def set_training_mode(self, training):
+    def set_training_mode(self, training: bool) -> None:
         """Enable or disable training mode."""
         self.training_mode = training
 
-    def set_epsilon(self, epsilon):
+    def set_epsilon(self, epsilon: float) -> None:
         """Update exploration rate."""
         self.epsilon = epsilon
 
-    def get_stats(self):
+    def get_stats(self) -> dict[str, int | float]:
         """
         Get statistics about the Q-table.
 

@@ -2,4 +2,4 @@
 __pycache__/
 .vscode/
 .claude/
-04_qlearning/training/q_table.pkl
+04_qlearning/**/*.pkl
