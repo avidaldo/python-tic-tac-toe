@@ -1,7 +1,8 @@
 # Tic-Tac-Toe
-## From Basic Python to Machine Learning
+## From Basic Python to Object-Oriented Design
 
-A complete educational project that progresses from basic Python implementations to Reinforcement Learning, using the classic Tic-Tac-Toe game.
+An educational project that uses the classic Tic-Tac-Toe game to go from basic Python to a game-playing
+algorithm (Minimax) and an object-oriented design.
 
 ## 🎯 Project Objective
 
@@ -10,7 +11,6 @@ This repository is designed to teach programming progressively:
 1. **Python Fundamentals** - Basic data structures
 2. **Game Algorithms** - Minimax and game theory
 3. **Software Design** - Object-oriented programming
-4. **Machine Learning** - Q-Learning and reinforcement learning
 
 Each section is independent but builds on previous concepts.
 
@@ -30,17 +30,10 @@ python-tic-tac-toe/
 │   ├── MINIMAX_ALGORITHM.md
 │   └── README.md
 │
-├── 03_oop/                 # 🏗️ Object-oriented version
-│   ├── main.py
-│   ├── game_board.py
-│   ├── player.py
-│   └── README.md
-│
-└── 04_qlearning/           # 🤖 Q-Learning (RL)
-    ├── notebooks/          # Step-by-step notebooks (01 basics → 06 tuning)
-    ├── core/               # Shared environment, agents and training loop
-    ├── standalone/         # Train and play from the command line
-    ├── oop_integration/    # Integration with 03_oop
+└── 03_oop/                 # 🏗️ Object-oriented version
+    ├── main.py
+    ├── game_board.py
+    ├── player.py
     └── README.md
 ```
 
@@ -112,43 +105,6 @@ Player (ABC)  →  Common interface
     └── Minimax
 ```
 
----
-
-### Level 4: Machine Learning
-**Folder:** [`04_qlearning/`](04_qlearning/)
-
-Build an agent that learns by itself using Reinforcement Learning:
-- Q-Learning algorithm
-- Bellman equation
-- Exploration vs Exploitation
-- Training in a turn-based (two-player) game
-- Training opponents: random, Minimax, self-play
-- Hyperparameter search
-- Integration with existing code
-
-**Learning path:**
-
-1. **Notebooks** `04_qlearning/notebooks/01` → `06`, in order (see [`04_qlearning/README.md`](04_qlearning/README.md))
-
-2. **Train your agent** (a few seconds), from the repository root
-   ```bash
-   python3 -m 04_qlearning.standalone.train_qlearning
-   ```
-
-3. **Play against the agent**
-   ```bash
-   python3 -m 04_qlearning.standalone.ttt_qlearning
-   ```
-
-4. **Integrate with OOP**
-   ```bash
-   python3 -m 04_qlearning.oop_integration.main
-   ```
-
-**Expected results** (canonical self-play, 20,000 games):
-- Never loses against Minimax (always draws)
-- Wins ~93% and loses ~0% against a random opponent
-
 ## 🎮 Quick Gameplay
 
 Just want to play? Choose your level:
@@ -159,40 +115,24 @@ python3 03_oop/main.py  # Option 1
 
 # Impossible - Perfect Minimax
 python3 03_oop/main.py  # Option 2
-
-# Very hard - Trained agent (Q-Learning), from the repository root
-python3 -m 04_qlearning.standalone.ttt_qlearning
-
 ```
 
 ## 📊 Approach Comparison
 
-| Aspect | Basic | Minimax | Q-Learning |
-|---------|--------|---------|------------|
-| **Complexity** | Low | Medium | High |
-| **Performance** | Poor (~50%) | Optimal | Near-optimal after training (never lost to Minimax in evaluation) |
-| **Learns** | No | No | Yes |
-| **Requires rules** | Yes | Yes | No |
-| **Code** | 50 lines | 100 lines | 300 lines |
-| **Extendable to other games** | No | With modifications | Yes |
+| Aspect | Basic | Minimax |
+|---------|--------|---------|
+| **Complexity** | Low | Medium |
+| **Performance** | Poor (~50%) | Optimal |
+| **Code** | 50 lines | 100 lines |
+| **Extendable to other games** | No | With modifications |
 
 ## 🛠️ Requirements
 
-### Basic (01-03)
 ```bash
 python3 --version  # Python 3.7+
 ```
 
-### Machine Learning (04)
-```bash
-pip install -r 04_qlearning/requirements.txt
-```
-
-Dependencies:
-- `numpy` - Numerical operations
-- `jupyter` - Interactive notebooks
-- `matplotlib` - Visualizations
-- `pandas`, `seaborn` - Hyperparameter search tables and heatmap
+No external dependencies are needed.
 
 ## 📈 Complexity Progression
 
@@ -200,7 +140,6 @@ Dependencies:
 01_basics:     ▓░░░░ (1/5) - Variables, loops, functions
 02_minimax:    ▓▓░░░ (2/5) - Recursion, algorithms
 03_oop:        ▓▓▓░░ (3/5) - Classes, design
-04_qlearning:  ▓▓▓▓▓ (5/5) - Machine learning, AI
 ```
 
 ## 🎓 Concepts Taught
@@ -226,16 +165,6 @@ Dependencies:
 - ✅ Design patterns
 - ✅ SOLID principles
 
-### 04 - Q-Learning
-- ✅ Reinforcement Learning
-- ✅ Q-Learning algorithm
-- ✅ Bellman equation
-- ✅ Exploration vs Exploitation
-- ✅ Agent training (random opponent, Minimax, self-play)
-- ✅ Performance evaluation
-- ✅ Hyperparameter search
-
-
 ## 🔬 Suggested Experiments
 
 ### Basic
@@ -254,13 +183,6 @@ Dependencies:
 - [ ] Save/load games
 - [ ] Add statistics
 
-### Q-Learning
-- [ ] Use board symmetries to shrink the Q-table (exercise in notebook 05)
-- [ ] Curriculum: random opponent first, then self-play
-- [ ] Visualize Q-values in real-time
-- [ ] Implement DQN (Deep Q-Network)
-
-
 ## 📝 Notes
 
 ### Why Tic-Tac-Toe?
@@ -275,9 +197,8 @@ Dependencies:
 
 After completing this project, you can:
 
-1. **More complex games**: Connect Four, Checkers, Chess
-2. **Deep RL**: Implement DQN with PyTorch/TensorFlow
-3. **Multi-agent**: Multiple competing agents
-4. **Transfer Learning**: Reuse Q-table for other games
-5. **Production**: Deploy as web app
+1. **Reinforcement Learning**: [tictactoe-qlearning](https://github.com/avidaldo/tictactoe-qlearning) trains an agent that learns to play by itself
+   (Q-learning), and compares it against the Minimax player from `02_minimax`
+2. **More complex games**: Connect Four, Checkers, Chess
+3. **Production**: Deploy as web app
 

@@ -139,7 +139,7 @@ python3 main.py
 
 ## Advantages of this Architecture
 
-✅ **Extensible**: Easy to add new players (e.g., Q-Learning)
+✅ **Extensible**: Easy to add new players (e.g., a [Q-learning agent](https://github.com/avidaldo/tictactoe-qlearning))
 ✅ **Testable**: Each class can be tested independently
 ✅ **Maintainable**: Localized changes, low impact
 ✅ **Readable**: Self-documenting code
