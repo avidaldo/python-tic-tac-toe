@@ -26,9 +26,10 @@ class QLearningMachinePlayer:
 ```
 
 The Q-table comes from `python3 -m 04_qlearning.standalone.train_qlearning`, which trains with **canonical
-states** (see notebook 05). The adapter therefore creates the agent with `canonical_state=True` and passes it
-the symbol as a plain string (`str(Symbol.AI)` → `'X'`), because canonical states compare board cells with
-the agent's own symbol.
+states** (see notebook 05). When it loads a table, the adapter detects its format from the stored states
+(`1`/`-1`/`0` for canonical, `'X'`/`'O'`/`None` for absolute), so tables trained either way work. It passes the
+symbol as a plain string (`str(Symbol.AI)` → `'X'`), because canonical states compare board cells with the
+agent's own symbol.
 
 ### [main.py](main.py)
 **OOP Game with Q-Learning Option**

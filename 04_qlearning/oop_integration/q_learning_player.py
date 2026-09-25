@@ -33,8 +33,7 @@ class QLearningMachinePlayer:
         self.agent = QLearningAgent(
             symbol=str(symbol),  # board cells are compared as plain strings
             training_mode=False,
-            epsilon=0.0,
-            canonical_state=True  # the Q-table is trained with canonical states
+            epsilon=0.0
         )
 
         # Load Q-table if provided
@@ -52,6 +51,9 @@ class QLearningMachinePlayer:
         """Load Q-table from file."""
         try:
             self.agent.load(path)
+            # Canonical states hold 1/-1/0; absolute states hold 'X'/'O'/None (the empty board fits both)
+            self.agent.canonical_state = not any(isinstance(cell, str)
+                                                 for state, _action in self.agent.q_table for cell in state)
             print(f"Q-learning agent loaded successfully")
         except Exception as e:
             print(f"Error loading Q-table: {e}")
