@@ -62,7 +62,7 @@ python3 ttt_v12_dict.py
 **Folder:** [`02_minimax/`](02_minimax/)
 
 Implement unbeatable AI using the Minimax algorithm:
-- Decision trees
+- Game trees
 - Advanced recursion
 - State evaluation
 - Game theory
@@ -122,14 +122,14 @@ python3 03_oop/main.py  # Option 2
 | Aspect | Basic | Minimax |
 |---------|--------|---------|
 | **Complexity** | Low | Medium |
-| **Performance** | Poor (~50%) | Optimal |
-| **Code** | 50 lines | 100 lines |
+| **Machine player** | Plays at random | Never loses |
+| **Code** | About 100 lines | About 180 lines |
 | **Extendable to other games** | No | With modifications |
 
 ## 🛠️ Requirements
 
 ```bash
-python3 --version  # Python 3.7+
+python3 --version  # any current Python 3 (tested with 3.11 and 3.14)
 ```
 
 No external dependencies are needed.
@@ -152,9 +152,8 @@ No external dependencies are needed.
 
 ### 02 - Minimax
 - ✅ Advanced recursion
-- ✅ Decision trees
+- ✅ Game trees
 - ✅ Search algorithms
-- ✅ Optimization (alpha-beta pruning)
 - ✅ Game theory
 
 ### 03 - OOP
@@ -188,7 +187,7 @@ No external dependencies are needed.
 ### Why Tic-Tac-Toe?
 - ✅ Everyone knows it
 - ✅ Simple rules
-- ✅ Small state space (3^9 = 19,683)
+- ✅ Small state space: at most 3^9 = 19,683 ways to fill the board, of which only 5,478 are positions that can arise in a game
 - ✅ Visible results
 - ✅ Quick to implement
 

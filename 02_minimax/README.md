@@ -8,7 +8,7 @@ This folder contains implementations of the Minimax algorithm, which creates an 
 Complete document explaining:
 - What the Minimax algorithm is
 - How it works step by step
-- Decision tree
+- The game tree
 - State evaluation
 - Implementation in Python
 
@@ -118,8 +118,8 @@ The algorithm:
 
 - 🧠 **Advanced recursion**: Functions that call themselves
 - 🎯 **Game algorithms**: Applied game theory
-- 🌳 **Decision trees**: State exploration
-- 📊 **Heuristic evaluation**: Assigning values to states
-- ⚡ **Optimization**: Alpha-beta pruning (in advanced versions)
+- 🌳 **Game trees**: exploring every possible continuation
+- 📊 **Evaluating final positions**: +1, −1 or 0 for a win, a loss or a draw
+- ⚡ **Next step**: alpha-beta pruning, not implemented here; it is the first suggested experiment of the [main README](../README.md#-suggested-experiments)
 
 

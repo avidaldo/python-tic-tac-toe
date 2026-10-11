@@ -332,7 +332,7 @@ For more complex games like Chess:
 1. **Alpha-Beta Pruning**
    - Prunes branches that cannot affect the final decision
    - Reduces complexity to O(b^(d/2)) in best case
-   - Mentioned in comments at lines 9-10 of both minimax files
+   - Not implemented in this folder: it is a suggested experiment in the main README
 
 2. **Depth-Limited Search**
    - Only search to a certain depth
@@ -357,7 +357,7 @@ For more complex games like Chess:
 
 Minimax represents a milestone in AI history: the idea that machines can reason about adversarial situations by simulating all possibilities. While modern game-playing AI has moved beyond pure minimax, understanding this algorithm is essential for:
 
-- Grasping fundamental AI concepts (search, evaluation, decision trees)
+- Grasping fundamental AI concepts (search, evaluation, game trees)
 - Appreciating the evolution from rule-based to learning-based AI
 - Building intuition for multi-agent and adversarial systems
 
