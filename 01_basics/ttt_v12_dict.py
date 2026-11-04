@@ -10,22 +10,27 @@ from random import choice
 MACHINE = "X"
 HUMAN = "O"
 
+
+
+# ------------------------------ UI ------------------------------
+ENTER_MOVE_INPUT = "Introduce el número de una casilla libre (1-9): "
+INVALID_INPUT_MSG = "Entrada no válida. Introduce un número del 1 al 9."
+INVALID_MOVE_MSG = "Esa casilla ya está ocupada. Elige otra."
+
+I_WON = "¡La máquina ha ganado!"
+YOU_WON = "¡Has ganado!"
+DRAW = "¡Empate!"
+
+
 # ------------------------------ Logic ------------------------------
 
-def is_taken_cell(board, cell):
-    return board[cell] is not None
 
-
+# Listado de celdas libres en el tablero. 
+# Se utiliza una lista por comprensión para recorrer los números del 1 al 9.
 def list_of_free_cells(board):
-    return [i for i in range(1, 10) if not is_taken_cell(board, i)]
+    return [i for i in range(1, 10) if board[i] is None]
 
 
-def is_first_move(board):
-    return len(list_of_free_cells(board)) == 9
-
-
-def is_board_completed(board):
-    return len(list_of_free_cells(board)) == 0
 
 
 def check_winner(board):
@@ -37,29 +42,30 @@ def check_winner(board):
 ]
     for combination in WINNING_COMBINATIONS:
         if all(board[cell] == board[combination[0]] != None for cell in combination):
+        # Comprueba si todas las celdas en la combinación ganadora tienen el mismo valor (ya sea "X" o "O") y no son None. 
+        # Si es así, significa que hay un ganador.
             return board[combination[0]]
 
 
-def machine_move(board):
-    if is_first_move(board):
-        board[5] = MACHINE
-        return
+
+# Comprueba la longitud de la lista de celdas libres. Si es 0, significa que el tablero está completo.
+def is_board_completed(board):
+    return len(list_of_free_cells(board)) == 0
+
+
+# Función que realiza el movimiento de la máquina. Selecciona una celda libre al azar y coloca la pieza de la máquina ("X").
+def machine_move(board):  
     board[choice(list_of_free_cells(board))] = MACHINE
+    
 
 
-# ------------------------------ UI ------------------------------
-
-ENTER_MOVE_INPUT = "Enter your move: "
-INVALID_INPUT_MSG = "You must enter a number of a cell (1-9)."
-INVALID_MOVE_MSG = "That cell is already taken."
-YOU_WON = "You won!"
-DRAW = "Draw!"
-I_WON = "I won!"
-
-
+# función definida dentro de otra función, también llamada función anidada (nested function)
 def display_board(board: dict):
     def cell_display(cell):
-        return board[cell] if is_taken_cell(board, cell) else cell
+        return board[cell] if board[cell] is not None else cell
+
+# Este print está dentro de la función display_board, por lo que se ejecutará cada vez que se llame a display_board.
+# cell_display se llama para cada celda del tablero (del 1 al 9) y devuelve el contenido de la celda o el número de la celda si está libre.
 
     print("+-------+-------+-------+")
     print("|       |       |       |")
@@ -76,16 +82,22 @@ def display_board(board: dict):
     print("+-------+-------+-------+")
 
 
-def enter_move(board):
+
+
+def human_move(board):
     while True:
+        # Solicita al usuario que ingrese su movimiento. Se guarda como string en cell_str.
         cell_str = input(ENTER_MOVE_INPUT)
         try:
+            # Convierte el string ingresado por el usuario a un entero. 
             cell = int(cell_str)
+            # Comprueba la valided del movimiento.
             if cell < 1 or cell > 9:
                 print(INVALID_INPUT_MSG)
-            elif is_taken_cell(board, cell):
+            elif board[cell] is not None:  # if is_taken_cell(board, cell):
                 print(INVALID_MOVE_MSG)
             else:
+                # Si el movimiento es válido, se sale del bucle while.
                 break
         except ValueError:
             print(INVALID_INPUT_MSG)
@@ -93,22 +105,42 @@ def enter_move(board):
 
 
 def main():
+    # Crea un tablero vacío representado como un diccionario con claves del 1 al 9 y valores None.
     board = {i: None for i in range(1, 10)}
 
+    # Mostramos el tablero vacío.
+    display_board(board)
+
+    current_player = choice([HUMAN, MACHINE])
+
+    print("¡Comienza la partida!")
+    print("Empiezas tú." if current_player == HUMAN else "Empieza la máquina.")
+
     while True:
-        machine_move(board)
+        if current_player == MACHINE:
+            machine_move(board)
+        else:
+            human_move(board)
         display_board(board)
-        if check_winner(board) == MACHINE:
+
+        # Comprobamos si el jugador actual ha ganado.
+        winner = check_winner(board)
+
+        if winner == MACHINE:
             print(I_WON)
             break
-        if is_board_completed(board):  # Draw only posible after X's move (X always moves first)
-            print(DRAW)
-            break
-        enter_move(board)
-        display_board(board)
-        if check_winner(board) == HUMAN:
+
+        if winner == HUMAN:
             print(YOU_WON)
             break
+
+        # Comprobamos si el tablero está completo.
+        if is_board_completed(board):
+            print(DRAW)
+            break
+        # Cambiamos de jugador.
+        current_player = HUMAN if current_player == MACHINE else MACHINE
+
 
 
 if __name__ == "__main__":
