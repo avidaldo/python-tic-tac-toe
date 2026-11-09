@@ -129,7 +129,7 @@ def display_board(board: dict):
     print("+-------+-------+-------+")
 
 
-def enter_move(board):
+def human_move(board):
     while True:
         cell_str = input(ENTER_MOVE_INPUT)
         try:
@@ -159,7 +159,7 @@ def main():
             print(COMPUTER_THINKING)
             machine_move(board)
         else:
-            enter_move(board)
+            human_move(board)
 
         display_board(board)
 

@@ -76,7 +76,7 @@ def display_board(board: dict):
     print("+-------+-------+-------+")
 
 
-def enter_move(board):
+def human_move(board):
     while True:
         cell_str = input(ENTER_MOVE_INPUT)
         try:
@@ -104,7 +104,7 @@ def main():
         if is_board_completed(board):  # Draw only posible after X's move (X always moves first)
             print(DRAW)
             break
-        enter_move(board)
+        human_move(board)
         display_board(board)
         if check_winner(board) == HUMAN:
             print(YOU_WON)
